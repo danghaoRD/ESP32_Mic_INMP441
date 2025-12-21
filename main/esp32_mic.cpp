@@ -17,9 +17,38 @@
 #include "driver/i2s_std.h"
 #include <string.h>
 
+#include "INMP441.h"
+static void mcu_intro(void);
+
+
 extern "C" int app_main(void)
 {
-    printf("Hello world!\n");
+    mcu_intro();
+
+    INMP441_init();
+
+    while (1)
+    {
+        ESP_LOGI("TAG", "Running...");
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+    
+
+
+
+    for (int i = 10; i >= 0; i--) {
+        printf("Restarting in %d seconds...\n", i);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+    printf("Restarting now.\n");
+    fflush(stdout);
+    esp_restart();
+}
+
+
+static void mcu_intro(void)
+{
+        printf("Hello world!\n");
 
     /* Print chip information */
     esp_chip_info_t chip_info;
@@ -38,25 +67,13 @@ extern "C" int app_main(void)
     printf("silicon revision v%d.%d, ", major_rev, minor_rev);
     if(esp_flash_get_size(NULL, &flash_size) != ESP_OK) {
         printf("Get flash size failed");
-        return 0;
+        return;
     }
 
     printf("%" PRIu32 "MB %s flash\n", flash_size / (uint32_t)(1024 * 1024),
            (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
 
     printf("Minimum free heap size: %" PRIu32 " bytes\n", esp_get_minimum_free_heap_size());
-
-    while (1)
-    {
-        ESP_LOGI("TAG", "Running...");
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-    }
-    
-    for (int i = 10; i >= 0; i--) {
-        printf("Restarting in %d seconds...\n", i);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-    }
-    printf("Restarting now.\n");
-    fflush(stdout);
-    esp_restart();
+    return;
 }
+

@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "hello_world",
-    "project_version":    "1",
+    "project_version":    "f28a1c9-dirty",
     "project_path":       "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world",
     "idf_path":           "C:/Users/MY PC/esp/v5.2/esp-idf",
     "build_dir":          "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world/build",
@@ -805,8 +805,8 @@
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "file": "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world/build/esp-idf/main/libmain.a",
-            "sources": [ "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world/main/esp32_mic.cpp" ],
-            "include_dirs": []
+            "sources": [ "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world/main/esp32_mic.cpp", "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world/main/INMP441.cpp" ],
+            "include_dirs": [ "." ]
         },
         "mbedtls": {
             "alias": "idf::mbedtls",
@@ -2116,7 +2116,7 @@
             "priv_reqs": [],
             "managed_reqs": [],
             "managed_priv_reqs": [],
-            "include_dirs": []
+            "include_dirs": [ "." ]
         }
     },
     "debug_prefix_map_gdbinit": ""
