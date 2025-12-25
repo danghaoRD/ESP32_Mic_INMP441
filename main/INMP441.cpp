@@ -88,6 +88,11 @@ static void i2s_mic_init(void)
             .ws   = I2S_WS_IO,
             .dout = I2S_GPIO_UNUSED,
             .din  = I2S_DATA_IN_IO,
+            .invert_flags = {
+                .mclk_inv = 0,
+                .bclk_inv = 0,
+                .ws_inv   = 0,
+            },
         },
     };
 

@@ -1,4 +1,4 @@
-/* * Data converted from F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world/build/esp-idf/mbedtls/x509_crt_bundle
+/* * Data converted from F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic/build/esp-idf/mbedtls/x509_crt_bundle
  */
 .data
 .section .rodata.embedded

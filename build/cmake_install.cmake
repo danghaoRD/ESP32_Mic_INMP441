@@ -1,8 +1,8 @@
-# Install script for directory: F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world
+# Install script for directory: F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/hello_world")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/esp32_mic_INMP441")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,8 +38,9 @@ if(NOT DEFINED CMAKE_OBJDUMP)
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
-  include("F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world/build/esp-idf/cmake_install.cmake")
+  # Include the install script for each subdirectory.
+  include("F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic/build/esp-idf/cmake_install.cmake")
+
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -50,5 +51,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

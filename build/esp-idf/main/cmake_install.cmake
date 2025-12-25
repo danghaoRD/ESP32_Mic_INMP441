@@ -1,8 +1,8 @@
-# Install script for directory: F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world/main
+# Install script for directory: F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic/main
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/hello_world")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/esp32_mic_INMP441")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

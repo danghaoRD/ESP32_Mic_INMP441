@@ -5,18 +5,18 @@ cmake_minimum_required(VERSION 3.5)
 
 file(MAKE_DIRECTORY
   "C:/Users/MY PC/esp/v5.2/esp-idf/components/bootloader/subproject"
-  "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world/build/bootloader"
-  "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world/build/bootloader-prefix"
-  "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world/build/bootloader-prefix/tmp"
-  "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world/build/bootloader-prefix/src/bootloader-stamp"
-  "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world/build/bootloader-prefix/src"
-  "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world/build/bootloader-prefix/src/bootloader-stamp"
+  "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic/build/bootloader"
+  "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic/build/bootloader-prefix"
+  "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic/build/bootloader-prefix/tmp"
+  "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic/build/bootloader-prefix/src/bootloader-stamp"
+  "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic/build/bootloader-prefix/src"
+  "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic/build/bootloader-prefix/src/bootloader-stamp"
 )
 
 set(configSubDirs )
 foreach(subDir IN LISTS configSubDirs)
-    file(MAKE_DIRECTORY "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
+    file(MAKE_DIRECTORY "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
 endforeach()
 if(cfgdir)
-  file(MAKE_DIRECTORY "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
+  file(MAKE_DIRECTORY "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
 endif()

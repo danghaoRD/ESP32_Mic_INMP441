@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world/build/bootloader/esp-idf/cmake_install.cmake")
+  include("F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic/build/bootloader/esp-idf/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/hello_world/build/bootloader/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic/build/bootloader/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

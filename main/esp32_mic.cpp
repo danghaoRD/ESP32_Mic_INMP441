@@ -18,6 +18,8 @@
 #include <string.h>
 
 #include "INMP441.h"
+#include "AI_audio.h"
+
 static void mcu_intro(void);
 
 
@@ -26,7 +28,8 @@ extern "C" int app_main(void)
     mcu_intro();
 
     INMP441_init();
-
+    AI_audio_init();
+    
     while (1)
     {
         ESP_LOGI("TAG", "Running...");
