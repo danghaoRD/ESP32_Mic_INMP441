@@ -16,11 +16,11 @@ static const char *TAG = "INMP441";
 #define I2S_DATA_IN_IO    GPIO_NUM_13
 
 
-static i2s_chan_handle_t rx_handle = NULL;
+i2s_chan_handle_t rx_handle = NULL;
 static void i2s_mic_init(void);
 void mic_read_task(void *arg)
 {
-    int16_t rx_buf[256];
+    int16_t rx_buf[240]; // same as dma_frame_num
     size_t bytes_read = 0;
 
     while (1) {
@@ -52,7 +52,7 @@ void INMP441_init(void)
 {
     // Initialization code for INMP441 microphone
     i2s_mic_init();
-    xTaskCreate(mic_read_task, "mic_read_task", 4096, NULL, 5, NULL);
+   // xTaskCreate(mic_read_task, "mic_read_task", 4096, NULL, 5, NULL);
     ESP_LOGI(TAG, "Microphone init done.");
 }
 
@@ -70,19 +70,7 @@ static void i2s_mic_init(void)
     /* 2. Standard I2S configuration */
     i2s_std_config_t std_cfg = {
         .clk_cfg = I2S_STD_CLK_DEFAULT_CONFIG(I2S_SAMPLE_RATE),
-        // .slot_cfg = I2S_STD_MSB_SLOT_DEFAULT_CONFIG(
-        //     I2S_DATA_BIT_WIDTH_16BIT,
-        //     I2S_SLOT_MODE_MONO
-        // ),
-        .slot_cfg = {
-            .data_bit_width = I2S_DATA_BIT_WIDTH_16BIT,
-            .slot_bit_width = I2S_SLOT_BIT_WIDTH_32BIT, // ⭐ RẤT QUAN TRỌNG
-            .slot_mode = I2S_SLOT_MODE_MONO,
-            .slot_mask = I2S_STD_SLOT_LEFT,             // ⭐ L/R = GND
-            .ws_width = 32,
-            .ws_pol = false,
-            .bit_shift = true,                          // ⭐ INMP441 cần
-        },
+        .slot_cfg = I2S_STD_PHILIPS_SLOT_DEFAULT_CONFIG(I2S_DATA_BIT_WIDTH_16BIT, I2S_SLOT_MODE_MONO), // ⭐ INMP441 is mono AND USE PHILIPS FORMAT        
         .gpio_cfg = {
             .bclk = I2S_BCK_IO,
             .ws   = I2S_WS_IO,
@@ -95,7 +83,7 @@ static void i2s_mic_init(void)
             },
         },
     };
-
+    
     ESP_ERROR_CHECK(i2s_channel_init_std_mode(rx_handle, &std_cfg));
 
     /* 3. Enable RX */

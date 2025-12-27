@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "esp32_mic_INMP441",
-    "project_version":    "0d1eec9-dirty",
+    "project_version":    "ad30e6b-dirty",
     "project_path":       "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic",
     "idf_path":           "C:/Users/MY PC/esp/v5.2/esp-idf",
     "build_dir":          "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic/build",
