@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "esp32_mic_INMP441",
-    "project_version":    "ad30e6b-dirty",
+    "project_version":    "cfabefa-dirty",
     "project_path":       "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic",
     "idf_path":           "C:/Users/MY PC/esp/v5.2/esp-idf",
     "build_dir":          "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic/build",
@@ -801,7 +801,7 @@
             "type": "LIBRARY",
             "lib": "__idf_main",
             "reqs": [],
-            "priv_reqs": [ "spi_flash", "nvs_flash", "esp_psram", "esp_http_server", "esp_timer", "esp_netif", "esp_wifi", "esp_event", "driver" ],
+            "priv_reqs": [ "spi_flash", "nvs_flash", "esp_psram", "esp_timer", "esp_netif", "esp_event", "driver" ],
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "file": "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic/build/esp-idf/main/libmain.a",
@@ -2113,7 +2113,7 @@
             "dir": "F:/code/ESP/Edge AI/Example/ESP32Mic_INMP441/esp32_mic/main",
             "lib": "__idf_main",
             "reqs": [],
-            "priv_reqs": [ "spi_flash", "nvs_flash", "esp_psram", "esp_http_server", "esp_timer", "esp_netif", "esp_wifi", "esp_event", "driver" ],
+            "priv_reqs": [ "spi_flash", "nvs_flash", "esp_psram", "esp_timer", "esp_netif", "esp_event", "driver" ],
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "include_dirs": [ "..", "../tflite-model", "../model-parameters", "../edge-impulse-sdk", "../edge-impulse-sdk/classifier", "../edge-impulse-sdk/dsp", "../edge-impulse-sdk/porting", "../edge-impulse-sdk/porting/espressif/ESP-NN", "../edge-impulse-sdk/porting/espressif/ESP-NN/include", "../edge-impulse-sdk//porting/espressif/esp-dsp/modules/fft/include", "../edge-impulse-sdk//porting/espressif/esp-dsp/modules/common/include", "../edge-impulse-sdk/tensorflow", "../edge-impulse-sdk/third_party", "../edge-impulse-sdk/third_party/ruy", "../edge-impulse-sdk/third_party/gemmlowp", "../edge-impulse-sdk/third_party/flatbuffers/include", "." ]

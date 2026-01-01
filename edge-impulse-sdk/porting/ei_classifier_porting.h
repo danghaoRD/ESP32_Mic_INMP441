@@ -374,6 +374,7 @@ void ei_free(void *ptr);
 #define EI_MAX_OVERFLOW_BUFFER_COUNT	30
 #endif
 
+//#define EI_CLASSIFIER_ALLOCATION_STATIC
 // End additional configuration
 
 #endif // _EI_CLASSIFIER_PORTING_H_

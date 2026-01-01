@@ -96,7 +96,7 @@ ei_learning_block_config_tflite_graph_t ei_learning_block_config_845155_5 = {
     .block_id = 5,
     .output_tensors_indices = ei_output_tensors_indices_845155_5,
     .output_tensors_size = ei_output_tensors_size_845155_5,
-    .quantized = 0,
+    .quantized = 1,
     .compiled = 1,
     .graph_config = (void*)&ei_config_graph_845155_5,
     .dequantize_output = 0,
@@ -116,6 +116,11 @@ const ei_learning_block_t ei_learning_blocks_845155_1[ei_learning_blocks_845155_
     },
 };
 
+ei_fill_result_classification_i8_config_t ei_fill_result_classification_i8_config_845155_5 = {
+    .zero_point = -128,
+    .scale = 0.00390625
+};
+
 const size_t ei_postprocessing_blocks_845155_1_size = 1;
 const ei_postprocessing_block_t ei_postprocessing_blocks_845155_1[ei_postprocessing_blocks_845155_1_size] = {
     {
@@ -123,9 +128,9 @@ const ei_postprocessing_block_t ei_postprocessing_blocks_845155_1[ei_postprocess
         .type = EI_CLASSIFIER_MODE_CLASSIFICATION,
         .init_fn = NULL,
         .deinit_fn = NULL,
-        .postprocess_fn = &process_classification_f32,
+        .postprocess_fn = &process_classification_i8,
         .display_fn = NULL,
-        .config = NULL,
+        .config = (void*)&ei_fill_result_classification_i8_config_845155_5,
         .input_block_id = 5
     },
 };
@@ -140,7 +145,7 @@ const ei_impulse_t impulse_845155_1 = {
     .project_name = "Haodv-project-voice",
     .impulse_id = 1,
     .impulse_name = "Impulse #1",
-    .deploy_version = 5,
+    .deploy_version = 6,
 
     .nn_input_frame_size = 3960,
     .raw_sample_count = 16000,

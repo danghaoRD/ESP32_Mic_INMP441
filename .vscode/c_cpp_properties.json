@@ -9,7 +9,7 @@
         "${config:idf.espIdfPathWin}/components/**",
         "${workspaceFolder}/**"
       ],
-      "browse": {
+            "browse": {
         "path": [
           "${config:idf.espIdfPath}/components",
           "${config:idf.espIdfPathWin}/components",

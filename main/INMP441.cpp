@@ -2,6 +2,7 @@
 #include "INMP441.h"
 #include <stdio.h>
 #include "driver/i2s_std.h"
+#include "driver/gpio.h"
 #include "esp_log.h"
 // #include <string.h>
 
@@ -10,7 +11,7 @@
 #include "freertos/task.h"
 static const char *TAG = "INMP441";
 
-#define I2S_SAMPLE_RATE   16000
+#define I2S_SAMPLE_RATE   8000
 #define I2S_BCK_IO        GPIO_NUM_14
 #define I2S_WS_IO         GPIO_NUM_15
 #define I2S_DATA_IN_IO    GPIO_NUM_13

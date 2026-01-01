@@ -16,24 +16,79 @@
 #include "esp_log.h"
 #include "driver/i2s_std.h"
 #include <string.h>
-
+#include "driver/gpio.h"
+#include "driver/uart.h"
 #include "INMP441.h"
 #include "AI_audio.h"
 
 static void mcu_intro(void);
 
-
+#define BUTTON_GPIO     GPIO_NUM_0
+#define LED_GPIO        GPIO_NUM_4
+uint8_t button_pressed = 0;
+static int prev_button_state = 1; // assuming pull-up, not pressed
 extern "C" int app_main(void)
 {
+   esp_log_level_set("*", ESP_LOG_NONE);
     mcu_intro();
 
     INMP441_init();
     AI_audio_init();
+
+    gpio_config_t io_conf = {
+        .pin_bit_mask = (1ULL << BUTTON_GPIO),
+        .mode = GPIO_MODE_INPUT,
+        .pull_up_en = GPIO_PULLUP_ENABLE,
+        .pull_down_en = GPIO_PULLDOWN_DISABLE,
+        .intr_type = GPIO_INTR_DISABLE,
+    };
+    gpio_config(&io_conf);
+
+    gpio_config_t io_conf_led = {
+        .pin_bit_mask = (1ULL << LED_GPIO),
+        .mode = GPIO_MODE_OUTPUT,
+        .pull_up_en = GPIO_PULLUP_DISABLE,
+        .pull_down_en = GPIO_PULLDOWN_DISABLE,
+        .intr_type = GPIO_INTR_DISABLE,
+    };
+    gpio_config(&io_conf_led);
+
+    uart_config_t uart_config = {
+        .baud_rate = 115200,
+        .data_bits = UART_DATA_8_BITS,
+        .parity = UART_PARITY_DISABLE,
+        .stop_bits = UART_STOP_BITS_1,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+        .rx_flow_ctrl_thresh = 122,
+    };
+
+    // Configure UART
+    uart_param_config(UART_NUM_0, &uart_config);
     
+    // Set pins (UART0 default: TXD=GPIO1, RXD=GPIO3)
+    uart_set_pin(UART_NUM_0, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE, 
+                 UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
+    
+    // Install driver
+    uart_driver_install(UART_NUM_0, 1024, 1024, 0, NULL, 0);
+
     while (1)
     {
-        ESP_LOGI("TAG", "Running...");
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        int curr_button_state = gpio_get_level(BUTTON_GPIO);
+      //  ESP_LOGI("TAG", "Button pressed first %d", curr_button_state);
+        if(prev_button_state != curr_button_state)
+        {
+            if(curr_button_state == 1)
+            {
+                button_pressed = 1;
+
+                ESP_LOGI("TAG", "Button pressed! %d", curr_button_state);
+
+            }
+        }
+        prev_button_state = curr_button_state;
+        //ESP_LOGI("TAG", "Running...");
+        vTaskDelay(10 / portTICK_PERIOD_MS);
     }
     
 
@@ -77,6 +132,9 @@ static void mcu_intro(void)
            (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
 
     printf("Minimum free heap size: %" PRIu32 " bytes\n", esp_get_minimum_free_heap_size());
+
+    vTaskDelay(pdMS_TO_TICKS(1000));
+
     return;
 }
 
