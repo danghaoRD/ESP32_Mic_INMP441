@@ -18,48 +18,10 @@ static const char *TAG = "INMP441";
 
 
 i2s_chan_handle_t rx_handle = NULL;
-static void i2s_mic_init(void);
-void mic_read_task(void *arg)
-{
-    int16_t rx_buf[240]; // same as dma_frame_num
-    size_t bytes_read = 0;
 
-    while (1) {
-        esp_err_t ret = i2s_channel_read(
-            rx_handle,
-            rx_buf,
-            sizeof(rx_buf),
-            &bytes_read,
-            portMAX_DELAY
-        );
-
-        if (ret == ESP_OK && bytes_read > 0) {
-            int samples = bytes_read / sizeof(int16_t);
-
-            /* Debug nhanh: xem biên độ */
-            int16_t peak = 0;
-            for (int i = 0; i < samples; i++) {
-                int16_t v = rx_buf[i];
-                if (v < 0) v = -v;
-                if (v > peak) peak = v;
-            }
-
-            ESP_LOGI(TAG, "samples=%d peak=%d", samples, peak);
-        }
-    }
-}
-
-void INMP441_init(void)
+void inmp441_init(void)
 {
     // Initialization code for INMP441 microphone
-    i2s_mic_init();
-   // xTaskCreate(mic_read_task, "mic_read_task", 4096, NULL, 5, NULL);
-    ESP_LOGI(TAG, "Microphone init done.");
-}
-
-
-static void i2s_mic_init(void)
-{
     /* 1. Create I2S channel */
     i2s_chan_config_t chan_cfg = I2S_CHANNEL_DEFAULT_CONFIG(
         I2S_NUM_0,
@@ -94,4 +56,32 @@ static void i2s_mic_init(void)
 }
 
 
+void inmp441_deinit(void)
+{
+    ESP_ERROR_CHECK(i2s_channel_disable(rx_handle));
+    ESP_ERROR_CHECK(i2s_del_channel(rx_handle));
+    ESP_LOGI(TAG, "I2S mic deinitialized");
+}
+
+/**
+ * @func    inm441_read
+ * @brief   wait and copy data from i2s ringbuff to dest
+ * @param   int16_t *dest: destination buffer pointer
+ * @param   size_t len: length of data to read in bytes
+ * @param   size_t *bytes_read: actual bytes read
+ * @param   uint32_t timeout_ms: timeout of reading in milliseconds
+ * @reval   -ret reading status
+ */
+esp_err_t inmp441_read(int16_t *dest, size_t len, size_t *bytes_read, uint32_t timeout_ms)
+{
+    esp_err_t ret =  i2s_channel_read(
+        rx_handle,
+        dest,
+        len,
+        bytes_read,
+        timeout_ms
+    );
+
+    return ret;
+}
 

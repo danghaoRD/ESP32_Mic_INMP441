@@ -35,7 +35,6 @@ typedef struct {
     uint32_t n_samples;
 } audio_interface_t;
 
-extern i2s_chan_handle_t rx_handle;
 static audio_interface_t audio_interface;
 
 static void ai_audio_interface_callback(uint32_t num_samples);
@@ -123,13 +122,15 @@ static void audio_capture_task(void *arg)
             gpio_set_level(GPIO_NUM_4, 1);
             button_pressed = 0;
             memset(audio_interface.i2s_readbuffer, 0, sizeof(audio_interface.i2s_readbuffer));
-            esp_err_t ret = i2s_channel_read(
-            rx_handle,
-            audio_interface.i2s_readbuffer,
-            EI_CLASSIFIER_SLICE_SIZE * sizeof(int16_t),
-            &bytes_read,
-            portMAX_DELAY
-            );
+            // esp_err_t ret = i2s_channel_read(
+            // rx_handle,
+            // audio_interface.i2s_readbuffer,
+            // EI_CLASSIFIER_SLICE_SIZE * sizeof(int16_t),
+            // &bytes_read,
+            // portMAX_DELAY
+            // );
+            esp_err_t ret = inmp441_read(audio_interface.i2s_readbuffer, EI_CLASSIFIER_SLICE_SIZE * sizeof(int16_t),
+                                         &bytes_read, portMAX_DELAY);
             
             uint16_t samples_read = bytes_read / sizeof(int16_t);
             gpio_set_level(GPIO_NUM_4, 0);

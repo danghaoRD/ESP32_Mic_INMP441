@@ -74,9 +74,10 @@ list(APPEND SOURCE_FILES ${S_FILES_ESP_DSP})
 #     "*.cpp"
 # )
 
-idf_component_register( SRCS "esp32_mic.cpp"
+idf_component_register( SRCS "button.cpp" "esp32_mic.cpp"
                              "AI_audio.cpp"
                              "INMP441.cpp"
+                             "uart_driver.cpp"
                             "${SOURCE_FILES}"
                        INCLUDE_DIRS "${include_dirs}" 
                                     "."

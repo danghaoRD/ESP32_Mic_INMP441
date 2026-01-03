@@ -21,56 +21,26 @@
 #include "INMP441.h"
 #include "AI_audio.h"
 
+#include "my_config.h"
+#include "button.h"
+#include "uart_driver.h"
+
 static void mcu_intro(void);
 
-#define BUTTON_GPIO     GPIO_NUM_0
-#define LED_GPIO        GPIO_NUM_4
 uint8_t button_pressed = 0;
 static int prev_button_state = 1; // assuming pull-up, not pressed
 extern "C" int app_main(void)
 {
-   esp_log_level_set("*", ESP_LOG_NONE);
+    esp_log_level_set("*", ESP_LOG_NONE);
     mcu_intro();
 
-    INMP441_init();
+    inmp441_init();
     AI_audio_init();
 
-    gpio_config_t io_conf = {
-        .pin_bit_mask = (1ULL << BUTTON_GPIO),
-        .mode = GPIO_MODE_INPUT,
-        .pull_up_en = GPIO_PULLUP_ENABLE,
-        .pull_down_en = GPIO_PULLDOWN_DISABLE,
-        .intr_type = GPIO_INTR_DISABLE,
-    };
-    gpio_config(&io_conf);
+    button_init();
+    uart_init();
 
-    gpio_config_t io_conf_led = {
-        .pin_bit_mask = (1ULL << LED_GPIO),
-        .mode = GPIO_MODE_OUTPUT,
-        .pull_up_en = GPIO_PULLUP_DISABLE,
-        .pull_down_en = GPIO_PULLDOWN_DISABLE,
-        .intr_type = GPIO_INTR_DISABLE,
-    };
-    gpio_config(&io_conf_led);
 
-    uart_config_t uart_config = {
-        .baud_rate = 115200,
-        .data_bits = UART_DATA_8_BITS,
-        .parity = UART_PARITY_DISABLE,
-        .stop_bits = UART_STOP_BITS_1,
-        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
-        .rx_flow_ctrl_thresh = 122,
-    };
-
-    // Configure UART
-    uart_param_config(UART_NUM_0, &uart_config);
-    
-    // Set pins (UART0 default: TXD=GPIO1, RXD=GPIO3)
-    uart_set_pin(UART_NUM_0, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE, 
-                 UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
-    
-    // Install driver
-    uart_driver_install(UART_NUM_0, 1024, 1024, 0, NULL, 0);
 
     while (1)
     {
