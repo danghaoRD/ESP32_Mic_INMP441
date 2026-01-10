@@ -7,6 +7,10 @@
 #ifndef MY_CONFIG_H
 #define MY_CONFIG_H
 
+#define EXAMPLE_RECORD            1
+#define EXAMPLE_AI_CLASSIFIER     2
+#define EXAMPLE_BUILD             EXAMPLE_RECORD
+
 #define BUTTON_GPIO     GPIO_NUM_0
 #define LED_GPIO        GPIO_NUM_4
 

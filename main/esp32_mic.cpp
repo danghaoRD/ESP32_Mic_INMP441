@@ -31,15 +31,16 @@ uint8_t button_pressed = 0;
 static int prev_button_state = 1; // assuming pull-up, not pressed
 extern "C" int app_main(void)
 {
-    esp_log_level_set("*", ESP_LOG_NONE);
+   esp_log_level_set("*", ESP_LOG_NONE);
     mcu_intro();
 
     inmp441_init();
-    AI_audio_init();
-
+    
     button_init();
+    led_init();
     uart_init();
-
+    
+    AI_audio_init();
 
 
     while (1)
