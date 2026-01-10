@@ -31,7 +31,9 @@ uint8_t button_pressed = 0;
 static int prev_button_state = 1; // assuming pull-up, not pressed
 extern "C" int app_main(void)
 {
-   esp_log_level_set("*", ESP_LOG_NONE);
+    #if(BUILD_EXAMPLE == EXAMPLE_RECORD)
+        esp_log_level_set("*", ESP_LOG_NONE);
+    #endif
     mcu_intro();
 
     inmp441_init();
@@ -58,8 +60,8 @@ extern "C" int app_main(void)
             }
         }
         prev_button_state = curr_button_state;
-        //ESP_LOGI("TAG", "Running...");
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+       // ESP_LOGI("TAG", "Running...");
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
     
 

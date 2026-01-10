@@ -5,7 +5,7 @@ import os
 
 PORT = "COM6"
 BAUD = 115200
-SAMPLE_RATE = 8000
+SAMPLE_RATE = 16000
 CHANNELS = 1
 SAMPLE_WIDTH = 2  # int16 = 2 bytes
 

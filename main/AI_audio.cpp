@@ -20,6 +20,7 @@
 #include "esp_log.h"
 #include "driver/uart.h"
 #include "driver/gpio.h"
+#include "esp_err.h"
 
 #include "edge-impulse-sdk/classifier/ei_run_classifier.h"
 #include "model-parameters/model_metadata.h"
@@ -75,14 +76,15 @@ void AI_audio_init(void)
     printf("Free heap: %d\n", heap_caps_get_free_size(MALLOC_CAP_8BIT));
     printf("Free PSRAM: %d\n", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
 
+    xTaskCreate(audio_capture_task, "audio_capture_task", 4096, NULL, 5, NULL);
+
     #if(EXAMPLE_BUILD == EXAMPLE_RECORD)
-        xTaskCreate(audio_capture_task, "audio_capture_task", 4096, NULL, 5, NULL);
         xTaskCreate(send_audio_task, "send_audio_task", 4096, NULL, 5, NULL);
     #elif(EXAMPLE_BUILD == EXAMPLE_AI_CLASSIFIER)
-        run_classifier_init();
-        xTaskCreate(run_classifier_task, "run_classifier_task", 8192, NULL, 6, NULL);
+        //run_classifier_init();
+        //xTaskCreate(run_classifier_task, "run_classifier_task", 8192, NULL, 6, NULL);
+        xTaskCreatePinnedToCore(run_classifier_task, "run_classifier_task", 8192*2, NULL, 24, NULL, 1);
     #endif
-  //  xTaskCreatePinnedToCore(run_classifier_task, "run_classifier_task", 8192*2, NULL, 24, NULL, 1);
 
 
     #if 0
@@ -120,18 +122,30 @@ static void audio_capture_task(void *arg)
     size_t bytes_read = 0;
     // Audio capture and processing loop
     while (1) {
-        if(button_pressed)
-        { 
-            #if(EXAMPLE_BUILD == EXAMPLE_RECORD)
+        #if(EXAMPLE_BUILD == EXAMPLE_RECORD)
+            if(button_pressed)
+            { 
                 led_set_brigh_percen(10);
-            #endif
+                button_pressed = 0;
 
-            button_pressed = 0;
+                memset(audio_interface.i2s_readbuffer, 0, sizeof(audio_interface.i2s_readbuffer));
+                
+                esp_err_t ret = inmp441_read_oneTime(audio_interface.i2s_readbuffer, EI_CLASSIFIER_SLICE_SIZE * sizeof(int16_t),
+                                            &bytes_read, portMAX_DELAY);
+                uint16_t samples_read = bytes_read / sizeof(int16_t);
+                if(ret == ESP_OK && samples_read > 0) 
+                {
+                    ai_audio_interface_callback(samples_read);
+                }
 
+                led_set_brigh_percen(0);
+
+            }
+        #elif(EXAMPLE_BUILD == EXAMPLE_AI_CLASSIFIER)
             memset(audio_interface.i2s_readbuffer, 0, sizeof(audio_interface.i2s_readbuffer));
-
+            
             esp_err_t ret = inmp441_read(audio_interface.i2s_readbuffer, EI_CLASSIFIER_SLICE_SIZE * sizeof(int16_t),
-                                         &bytes_read, portMAX_DELAY);
+                                        &bytes_read, portMAX_DELAY);
             
             uint16_t samples_read = bytes_read / sizeof(int16_t);
 
@@ -139,12 +153,7 @@ static void audio_capture_task(void *arg)
             {
                 ai_audio_interface_callback(samples_read);
             }
-
-            #if(EXAMPLE_BUILD == EXAMPLE_RECORD)
-                led_set_brigh_percen(0);
-            #endif
-        }
-
+    #endif
         vTaskDelay(pdMS_TO_TICKS(10));
     }
 }
@@ -188,6 +197,7 @@ static void run_classifier_task(void *arg)
 {
     run_classifier_init();
     static uint8_t print_result = 0;
+    static uint8_t led_state = 0;
     while (1)
     {
         if(audio_interface.buf_ready)
@@ -207,8 +217,19 @@ static void run_classifier_task(void *arg)
                 printf("run_classifier failed (%d)\n", err);
                 continue;
             }
-            if(result.classification[0].value > 0.1f)
+            if(result.classification[0].value > 0.3f)
+            {
                 display_results(&ei_default_impulse, &result);
+                if(result.classification[0].value > 0.5f)
+                {
+                    ESP_LOGI(TAG, "LED changed");
+                    led_state ^= 1;
+                }
+
+                if(led_state) led_set_brigh_percen(10);
+                else          led_set_brigh_percen(0);
+                    
+            }
 
             // if(++print_result >= (EI_CLASSIFIER_SLICES_PER_MODEL_WINDOW/1))
             // {

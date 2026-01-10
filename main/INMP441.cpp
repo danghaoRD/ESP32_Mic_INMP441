@@ -9,9 +9,11 @@
 #include "sdkconfig.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+
+#include "my_config.h"
 static const char *TAG = "INMP441";
 
-#define I2S_SAMPLE_RATE   8000          //Todo
+#define I2S_SAMPLE_RATE   16000          //Todo
 #define I2S_BCK_IO        GPIO_NUM_14
 #define I2S_WS_IO         GPIO_NUM_15
 #define I2S_DATA_IN_IO    GPIO_NUM_13
@@ -50,8 +52,9 @@ void inmp441_init(void)
     ESP_ERROR_CHECK(i2s_channel_init_std_mode(rx_handle, &std_cfg));
 
     /* 3. Enable RX */
-    ESP_ERROR_CHECK(i2s_channel_enable(rx_handle));
-
+    #if(EXAMPLE_BUILD == EXAMPLE_AI_CLASSIFIER)
+        ESP_ERROR_CHECK(i2s_channel_enable(rx_handle));
+    #endif
     ESP_LOGI(TAG, "I2S mic initialized");
 }
 
@@ -85,3 +88,27 @@ esp_err_t inmp441_read(int16_t *dest, size_t len, size_t *bytes_read, uint32_t t
     return ret;
 }
 
+/**
+ * @func    inmp441_read_oneTime
+ * @brief   wait and copy data from i2s ringbuff to dest. turn on/off i2s rx channel for one time reading
+ * @param   int16_t *dest: destination buffer pointer
+ * @param   size_t len: length of data to read in bytes
+ * @param   size_t *bytes_read: actual bytes read
+ * @param   uint32_t timeout_ms: timeout of reading in milliseconds
+ * @reval   -ret reading status
+ */
+esp_err_t inmp441_read_oneTime(int16_t *dest, size_t len, size_t *bytes_read, uint32_t timeout_ms)
+{
+    ESP_ERROR_CHECK(i2s_channel_enable(rx_handle));
+
+    esp_err_t ret =  i2s_channel_read(
+        rx_handle,
+        dest,
+        len,
+        bytes_read,
+        timeout_ms
+    );
+
+    ESP_ERROR_CHECK(i2s_channel_disable(rx_handle));
+    return ret;
+}
